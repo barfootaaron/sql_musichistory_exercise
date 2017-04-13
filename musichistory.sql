@@ -470,14 +470,67 @@ FROM Album a
 LEFT JOIN Song s on s.AlbumId = a.AlbumId
 WHERE s.Title is NULL
 
+/* EX */	
+SELECT a.Title, s.Title FROM Album a LEFT JOIN Song s ON s.AlbumId = a.AlbumId;
+SELECT a.Title, s.Title FROM Song s LEFT JOIN Album a ON s.AlbumId = a.AlbumId;
+
 /* Write a SELECT query that provides the song titles, album title, and artist name for all of the data you just entered in. 
 	Use the LEFT JOIN keyword sequence to connect the tables, and the WHERE keyword to filter the results to the 
 	album and artist you added. */
-SELECT a.Title, s.Title FROM Album a LEFT JOIN Song s ON s.AlbumId = a.AlbumId;
-SELECT a.Title, s.Title FROM Song s LEFT JOIN Album a ON s.AlbumId = a.AlbumId;
+SELECT s.Title 'Song',
+	al.Title 'Album', 
+	a.ArtistName 'Artist', 
+	g.Label 'Genre'
+FROM Song s
+JOIN Album al ON s.AlbumId = al.AlbumId
+JOIN Artist a ON al.ArtistId = a.ArtistId
+JOIN Genre g ON s.GenreId = g.GenreId
+WHERE s.Title is 'Legs' OR s.Title is 'Walcott' OR s.Title is 'No Values';
+
+
+/* Write a SELECT statement to display how many songs exist for each album. 
+	You'll need to use the COUNT() function and the GROUP BY keyword sequence. */
+SELECT al.Title 'Album', COUNT(s.SongId) 'Song Count'
+FROM Song s
+JOIN Album al ON s.AlbumId = al.AlbumId
+WHERE s.AlbumId = al.AlbumId
+GROUP BY al.AlbumId
+
+/* Write a SELECT statement to display how many songs exist for each artist. 
+You'll need to use the COUNT() function and the GROUP BY keyword sequence. */
+SELECT a.ArtistName 'Artist', COUNT(s.SongId) '# of songs in db'
+FROM Song s
+JOIN Artist a ON s.ArtistId = a.ArtistId
+WHERE s.ArtistId = a.ArtistId
+GROUP BY a.ArtistId
+
+/* Write a SELECT statement to display how many songs exist for each genre. 
+ You'll need to use the COUNT() function and the GROUP BY keyword sequence. */
+SELECT g.Label 'Genre', COUNT(s.SongId) '# of songs in genre'
+FROM Song s
+JOIN Genre g ON s.GenreId = g.GenreId
+WHERE s.GenreId = g.GenreId
+GROUP BY g.GenreId
+
+/* Using MAX() function, write a select statement to find the album with the longest duration. 
+The result should display the album title and the duration. */
+SELECT al.Title 'Longest Album', MAX(al.AlbumLength) 'Album Duration'
+FROM Album al
+
+/* Using MAX() function, write a select statement to find the song with the longest duration.
+ The result should display the song title and the duration.  */
+SELECT s.Title 'Longest Song', MAX(s.SongLength) 'Song Duration'
+FROM Song s
+
+/* Modify the previous query to also display the title of the album.  */
+SELECT s.Title 'Longest Song', al.Title 'Album', MAX(s.SongLength) 'Song Duration'
+FROM Song s
+JOIN Album al ON s.AlbumId = al.AlbumId
+
+
+
 	
-	
-SELECT * FROM artist;
-SELECT * FROM album;
-SELECT * FROM genre;
-SELECT * FROM song;
+SELECT * FROM Artist;
+SELECT * FROM Album;
+SELECT * FROM Genre;
+SELECT * FROM Song;
